@@ -40,21 +40,13 @@ class APIBancoCentral:
 
 
 class Cotacao:
-    def __init__(self, data_cotacao=None):
-        self.cotation = False
-        data_atual = data_cotacao
-
-        # Se passar uma data específica como parâmetro na
-        # instância do objeto Cotacao, então busca a cotação daquela data.
-        # Senão busca a cotação da data atual.
-        if data_atual is None:
-            data_atual = date.today()
-
+    def __init__(self):
+        data_atual = date.today()
         ano = str(data_atual.year).zfill(4)
         mes = str(data_atual.month).zfill(2)
         dia = str(data_atual.day).zfill(2)
         data_base = f"{mes}-{dia}-{ano}"
-        weekno = date.weekday(data_atual)
+        weekno = 5  # date.weekday(data_atual)
         if weekno in [5, 6]:  # 5=sabado e 6=domingo
             logger.info("Hoje não tem cotação disponível")
             exit()
@@ -75,7 +67,6 @@ class Cotacao:
             if len(self.json_string["value"]) == 0:
                 logger.info("Não tem cotações disponíveis nesta data")
                 exit()
-            self.cotation = True
 
     def dolar_compra_ptax(self):
         return self.json_string["value"][0]["cotacaoCompra"]
