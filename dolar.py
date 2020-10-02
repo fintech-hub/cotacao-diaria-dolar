@@ -3,24 +3,29 @@
 
 from datetime import date
 import logging
+import enum
 
 import requests
 import json
 
 logger = logging.getLogger(__name__)
 
+class ModosDeConsulta(enum.Enum):
+   PorDia = 1
+   PorPeriodo = 2
+
 
 class Dolar:
-    def __init__(self, TODAY):
-        self.TODAY = TODAY
-        self.CURRENT_DATE = self.TODAY.strftime('%d-%m-%Y')
-        self.URL_BASE = 'https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/'
-        self.URL_RESOURCE = 'CotacaoDolarDia(dataCotacao=@dataCotacao)?'
-        self.URL_PARAM = f'@dataCotacao=%27{self.CURRENT_DATE}%27&$format=json'
-        self.URL = f'{self.URL_BASE}{self.URL_RESOURCE}{self.URL_PARAM}'
-
-        if self.is_weekday():
-            logger.info("Sábado ou Domingo sem cotação disponível")
+    def __init__(self, mode: ModosDeConsulta, data:date=None, periodo:dict=None):
+        if (mode == ModosDeConsulta.PorDia):
+            self.setUrl(_mode=mode, _data=data)
+            if self.is_weekday(data):
+                logger.info("Sábado ou Domingo sem cotação disponível")
+                return None
+        elif (mode == ModosDeConsulta.PorPeriodo):
+            self.setUrl(_mode=mode, _periodo=periodo)
+        else:
+            print('Tipo de consulta invalida')
             return None
 
         req = self.getURL()
@@ -34,6 +39,23 @@ class Dolar:
         if len(self.json_string["value"]) == 0:
             logger.info("Não tem cotações disponíveis nesta data")
             return None
+
+    def setUrl(self, _mode: ModosDeConsulta, _data:date =None, _periodo:dict =None):
+        self.URL_BASE = 'https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/'
+
+        if (_mode == ModosDeConsulta.PorDia):
+            d = _data.strftime('%m-%d-%Y')
+            self.URL_RESOURCE = 'CotacaoDolarDia(dataCotacao=@dataCotacao)?'
+            self.URL_PARAM = f'@dataCotacao=%27{d}%27&$format=json'
+        elif (_mode == ModosDeConsulta.PorPeriodo):
+            i = _periodo["inicio"].strftime('%m-%d-%Y')
+            f = _periodo["final"].strftime('%m-%d-%Y')
+            self.URL_RESOURCE = 'CotacaoDolarPeriodo(dataInicial=@dataInicial,dataFinalCotacao=@dataFinalCotacao)?'
+            self.URL_PARAM = f'@dataInicial=%27{i}%27&@dataFinalCotacao=%27{f}%27&$top=100&$format=json'
+        else:
+            return None
+
+        self.URL = f'{self.URL_BASE}{self.URL_RESOURCE}{self.URL_PARAM}'
 
     def getURL(self):
         headers = {
@@ -57,8 +79,8 @@ class Dolar:
         except requests.ConnectionError:
             return None
 
-    def is_weekday(self):
-        if date.weekday(self.TODAY) in [5, 6]:  # 5=saturday or 6=sunday
+    def is_weekday(self, day):
+        if date.weekday(day) in [5, 6]:  # 5=saturday or 6=sunday
             return True
         return False
 
