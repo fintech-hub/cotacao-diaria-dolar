@@ -48,14 +48,7 @@ class Dolar:
             "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7,mt;q=0.6,gl;q=0.5,he;q=0.4,ru;q=0.3,pl;q=0.2,la;q=0.1,es;q=0.1,fr;q=0.1,de;q=0.1,cy;q=0.1,und;q=0.1",
         }
 
-        try:
-            request = requests.get(self.URL, headers=headers, timeout=None)
-            if request.status_code == 200:
-                return request
-            elif request.status_code != 200:
-                return None
-        except requests.ConnectionError:
-            return None
+        return requests.get(self.URL, headers=headers, timeout=None)
 
     def is_weekday(self):
         if date.weekday(self.TODAY) in [5, 6]:  # 5=saturday or 6=sunday

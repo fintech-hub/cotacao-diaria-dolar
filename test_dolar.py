@@ -24,6 +24,9 @@ class TestCase(unittest.TestCase):
     def test_dolar_venda_ptax_maior_zero(self):
         self.assertTrue(self.cotacao.dolar_venda_ptax() > 0)
 
+    def test_ultimacotacao_exist(self):
+        self.assertIsNotNone(self.cotacao.dolar_ultimacotacao())
+
     def test_is_not_weekday(self):
         self.assertFalse(self.cotacao.is_weekday())
 
