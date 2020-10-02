@@ -23,19 +23,21 @@ A Ptax é atualizada em 4 janelas ao longo do dia:
 A Especificação da API está definida no site [Dados Abertos do Banco Central do Brasil](https://dadosabertos.bcb.gov.br/dataset/dolar-americano-usd-todos-os-boletins-diarios).
 
 
-# Instalação
+# Iniciando com o Projeto
+
+## Instalação
 
 ```bash
 $ pipenv install
 ```
 
-# Utilização
+## Utilização
 
 ```bash
 $ ./sample.py
 ```
 
-# Testes
+## Testes
 
 ```bash
 $ ./test_dolar.py
