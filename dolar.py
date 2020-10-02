@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from datetime import date, timedelta
+from datetime import date
 import logging
 
 import requests
@@ -9,7 +9,7 @@ import json
 
 logger = logging.getLogger(__name__)
 
-TODAY = date.today() + timedelta(days=2)
+TODAY = date.today()
 CURRENT_DATE = TODAY.strftime('%d-%m-%Y')
 URL_BASE = 'https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/'
 URL_RESOURCE = 'CotacaoDolarDia(dataCotacao=@dataCotacao)?'
