@@ -28,6 +28,7 @@ A Especificação da API está definida no site [Dados Abertos do Banco Central 
 ## Instalação
 
 ```bash
+$ pipenv shell
 $ pipenv install
 ```
 
