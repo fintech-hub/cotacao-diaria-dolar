@@ -1,5 +1,9 @@
 # Cotações diárias do Dólar
 
+[![Build Status](https://travis-ci.org/open-bacen/cotacao-diaria-dolar.svg)](https://travis-ci.org/open-bacen/cotacao-diaria-dolar)
+[![codecov](https://codecov.io/gh/open-bacen/cotacao-diaria-dolar/branch/master/graph/badge.svg)](https://codecov.io/gh/open-bacen/cotacao-diaria-dolar) 
+
+
 Dólar Ptax é a média aritmética das taxas obtidas em quatro consultas diárias de câmbio.
 
 ## Qual Dólar?
@@ -17,6 +21,25 @@ A Ptax é atualizada em 4 janelas ao longo do dia:
 
 ## Especificação da API
 A Especificação da API está definida no site [Dados Abertos do Banco Central do Brasil](https://dadosabertos.bcb.gov.br/dataset/dolar-americano-usd-todos-os-boletins-diarios).
+
+
+# Instalação
+
+```bash
+$ pipenv install
+```
+
+# Utilização
+
+```bash
+$ ./sample.py
+```
+
+# Testes
+
+```bash
+$ ./test_dolar.py
+```
 
 ## Licença
 [Licença MIT](LICENSE)
