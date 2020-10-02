@@ -1,8 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from datetime import date
 import unittest
+from datetime import date
+
 from dolar import Dolar
 
 

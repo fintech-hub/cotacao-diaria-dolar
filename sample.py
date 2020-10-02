@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import date
+
 from dolar import Dolar
 
 TODAY = date(2020, 10, 2)
