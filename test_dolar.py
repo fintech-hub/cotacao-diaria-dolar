@@ -34,12 +34,14 @@ class TestCase(unittest.TestCase):
         self.assertTrue(self.cotacaoPeriodo.dolar_venda_ptax() > 0)
 
     def test_is_not_weekday(self):
-        self.assertFalse(self.cotacaoDia.is_weekday())
+        TODAY = date(2020, 10, 1)
+        self.cotacaoDia = Dolar(mode=ModosDeConsulta.PorDia, data=TODAY)
+        self.assertFalse(self.cotacaoDia.is_weekday(TODAY))
 
     def test_is_weekday(self):
         TODAY = date(2020, 10, 3)
         self.cotacaoDia = Dolar(mode=ModosDeConsulta.PorDia, data=TODAY)
-        self.assertTrue(self.cotacaoDia.is_weekday())
+        self.assertTrue(self.cotacaoDia.is_weekday(TODAY))
 
 
 if __name__ == '__main__':
