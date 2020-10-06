@@ -35,7 +35,8 @@ class TestCase(unittest.TestCase):
         self.assertTrue(self.cotacaoPeriodo.dolar_venda_ptax() > 0)
 
     def test_ultimacotacao_exist(self):
-        self.assertIsNotNone(self.cotacao.dolar_ultimacotacao())
+        self.assertIsNotNone(self.cotacaoDia.dolar_ultimacotacao())
+        self.assertIsNotNone(self.cotacaoPeriodo.dolar_ultimacotacao())
 
     def test_is_not_weekday(self):
         TODAY = date(2020, 10, 1)
