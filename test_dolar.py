@@ -38,14 +38,40 @@ class TestCase(unittest.TestCase):
         self.assertIsNotNone(self.cotacaoDia.dolar_ultimacotacao())
         self.assertIsNotNone(self.cotacaoPeriodo.dolar_ultimacotacao())
 
+    def test_is_holiday_tiradentes(self):
+        TODAY = date(2020, 4, 21)
+        self.assertTrue(self.cotacaoDia.is_holiday(TODAY))
+
+    def test_is_holiday_independencia(self):
+        TODAY = date(2020, 9, 7)
+        self.assertTrue(self.cotacaoDia.is_holiday(TODAY))
+
+    def test_is_holiday_aparecida(self):
+        TODAY = date(2020, 10, 12)
+        self.assertTrue(self.cotacaoDia.is_holiday(TODAY))
+
+    def test_is_holiday_finados(self):
+        TODAY = date(2020, 11, 2)
+        self.assertTrue(self.cotacaoDia.is_holiday(TODAY))
+
+    def test_is_holiday_republica(self):
+        TODAY = date(2020, 11, 15)
+        self.assertTrue(self.cotacaoDia.is_holiday(TODAY))
+
+    def test_is_holiday_trabalho(self):
+        TODAY = date(2020, 5, 1)
+        self.assertTrue(self.cotacaoDia.is_holiday(TODAY))
+
+    def test_is_holiday_saopaulo(self):
+        TODAY = date(2020, 1, 25)
+        self.assertTrue(self.cotacaoDia.is_holiday(TODAY))
+
     def test_is_not_weekday(self):
         TODAY = date(2020, 10, 1)
-        self.cotacaoDia = Dolar(mode=ModosDeConsulta.PorDia, data=TODAY)
         self.assertFalse(self.cotacaoDia.is_weekday(TODAY))
 
     def test_is_weekday(self):
         TODAY = date(2020, 10, 3)
-        self.cotacaoDia = Dolar(mode=ModosDeConsulta.PorDia, data=TODAY)
         self.assertTrue(self.cotacaoDia.is_weekday(TODAY))
 
 

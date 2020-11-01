@@ -6,6 +6,7 @@ import logging
 from datetime import date
 import enum
 
+from workalendar.america.brazil import BrazilSaoPauloCity
 import requests
 
 logger = logging.getLogger(__name__)
@@ -21,7 +22,10 @@ class Dolar:
         if (mode == ModosDeConsulta.PorDia):
             self.setUrl(_mode=mode, _data=data)
             if self.is_weekday(data):
-                logger.info("Sábado ou Domingo sem cotação disponível")
+                logger.info("Sábado e Domingo não há cotações")
+                return None
+            if self.is_holiday(data):
+                logger.info("Feriados não há cotações")
                 return None
         elif (mode == ModosDeConsulta.PorPeriodo):
             self.setUrl(_mode=mode, _periodo=periodo)
@@ -72,6 +76,12 @@ class Dolar:
         }
 
         return requests.get(self.URL, headers=headers, timeout=None)
+
+    def is_holiday(self, day):
+        cal = BrazilSaoPauloCity()
+        if cal.is_working_day(day):
+            return False
+        return True
 
     def is_weekday(self, day):
         if date.weekday(day) in [5, 6]:  # 5=saturday or 6=sunday

@@ -5,7 +5,7 @@ from datetime import date
 from dolar import Dolar, ModosDeConsulta
 
 
-day = date(2020, 10, 2)
+day = date(2019, 11, 2)
 periodo = {
     "inicio": date(2020, 9, 28),
     "final": date(2020, 10, 2)
