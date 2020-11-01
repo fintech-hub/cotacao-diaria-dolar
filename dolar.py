@@ -10,13 +10,14 @@ import requests
 
 logger = logging.getLogger(__name__)
 
+
 class ModosDeConsulta(enum.Enum):
-   PorDia = 1
-   PorPeriodo = 2
+    PorDia = 1
+    PorPeriodo = 2
 
 
 class Dolar:
-    def __init__(self, mode: ModosDeConsulta, data:date=None, periodo:dict=None):
+    def __init__(self, mode: ModosDeConsulta, data: date = None, periodo: dict = None):
         if (mode == ModosDeConsulta.PorDia):
             self.setUrl(_mode=mode, _data=data)
             if self.is_weekday(data):
@@ -25,7 +26,7 @@ class Dolar:
         elif (mode == ModosDeConsulta.PorPeriodo):
             self.setUrl(_mode=mode, _periodo=periodo)
         else:
-            print('Tipo de consulta invalida')
+            print('Tipo de consulta inválida')
             return None
 
         req = self.getURL()
@@ -40,7 +41,7 @@ class Dolar:
             logger.info("Não tem cotações disponíveis nesta data")
             return None
 
-    def setUrl(self, _mode: ModosDeConsulta, _data:date =None, _periodo:dict =None):
+    def setUrl(self, _mode: ModosDeConsulta, _data: date = None, _periodo: dict = None):
         self.URL_BASE = 'https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/'
 
         if (_mode == ModosDeConsulta.PorDia):
