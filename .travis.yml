@@ -9,7 +9,8 @@ python: 3.7
 
 # Install dependencies
 install:
-  - pip install codecov, workalendar
+  - pip install codecov
+  - pip install workalendar
 
 # Run the unit test
 script:
