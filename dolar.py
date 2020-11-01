@@ -52,7 +52,7 @@ class Dolar:
             self.URL_RESOURCE = 'CotacaoDolarPeriodo(dataInicial=@dataInicial,dataFinalCotacao=@dataFinalCotacao)?'
             self.URL_PARAM = f'@dataInicial=%27{i}%27&@dataFinalCotacao=%27{f}%27&$top=100&$format=json'
         else:
-            return None
+            raise BancoCentralException('Tipo de consulta inválida')
 
         self.URL = f'{self.URL_BASE}{self.URL_RESOURCE}{self.URL_PARAM}'
 
