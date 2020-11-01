@@ -2,48 +2,42 @@
 # -*- coding: utf-8 -*-
 
 import json
-import logging
 from datetime import date
 import enum
 
 from workalendar.america.brazil import BrazilSaoPauloCity
 import requests
 
-logger = logging.getLogger(__name__)
-
 
 class ModosDeConsulta(enum.Enum):
     PorDia = 1
     PorPeriodo = 2
+    Error = 3
+
+
+class BancoCentralException(BaseException):
+    pass
 
 
 class Dolar:
     def __init__(self, mode: ModosDeConsulta, data: date = None, periodo: dict = None):
         if (mode == ModosDeConsulta.PorDia):
-            self.setUrl(_mode=mode, _data=data)
             if self.is_weekday(data):
-                logger.info("Sábado e Domingo não há cotações")
-                return None
+                raise BancoCentralException('Sábado e Domingo não há cotações')
             if self.is_holiday(data):
-                logger.info("Feriados não há cotações")
-                return None
+                raise BancoCentralException('Feriados não há cotações')
+            self.setUrl(_mode=mode, _data=data)
         elif (mode == ModosDeConsulta.PorPeriodo):
             self.setUrl(_mode=mode, _periodo=periodo)
         else:
-            print('Tipo de consulta inválida')
-            return None
+            raise BancoCentralException('Tipo de consulta inválida')
 
         req = self.getURL()
         if req.status_code != 200:
-            logger.info("Erro na conexão")
-            return None
+            raise BancoCentralException('Erro na conexão')
 
         resp = req.content.decode("utf-8")
         self.json_string = json.loads(resp)
-
-        if len(self.json_string["value"]) == 0:
-            logger.info("Não tem cotações disponíveis nesta data")
-            return None
 
     def setUrl(self, _mode: ModosDeConsulta, _data: date = None, _periodo: dict = None):
         self.URL_BASE = 'https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/'

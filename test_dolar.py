@@ -4,7 +4,11 @@
 import unittest
 from datetime import date
 
-from dolar import Dolar, ModosDeConsulta
+from dolar import (
+    Dolar,
+    ModosDeConsulta,
+    BancoCentralException
+)
 
 
 class TestCase(unittest.TestCase):
@@ -21,6 +25,33 @@ class TestCase(unittest.TestCase):
     def test_dolar_compra_ptax(self):
         self.assertIsNotNone(self.cotacaoDia.dolar_compra_ptax())
         self.assertIsNotNone(self.cotacaoPeriodo.dolar_compra_ptax())
+
+    def test_dolar_compra_ptax_weekend(self):
+        TODAY = date(2020, 11, 1)
+        with self.assertRaises(BancoCentralException) as context:
+            Dolar(
+                mode=ModosDeConsulta.PorDia,
+                data=TODAY
+            )
+        self.assertTrue('Sábado e Domingo não há cotações' in str(context.exception))
+
+    def test_dolar_compra_ptax_holiday(self):
+        TODAY = date(2020, 11, 2)
+        with self.assertRaises(BancoCentralException) as context:
+            Dolar(
+                mode=ModosDeConsulta.PorDia,
+                data=TODAY
+            )
+        self.assertTrue('Feriados não há cotações' in str(context.exception))
+
+    def test_mode_errors(self):
+        TODAY = date(2020, 10, 31)
+        with self.assertRaises(BancoCentralException) as context:
+            Dolar(
+                mode=ModosDeConsulta.Error,
+                data=TODAY
+            )
+        self.assertTrue('Tipo de consulta inválida' in str(context.exception))
 
     def test_dolar_compra_maior_zero(self):
         self.assertTrue(self.cotacaoDia.dolar_compra_ptax() > 0)
