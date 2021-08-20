@@ -1,0 +1,26 @@
+name: cotacao-diaria-dolar
+on: [push, pull_request]
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+    - name: Install pipenv
+      run: |
+        python -m pip install --upgrade pipenv wheel
+    - name: Install dependencies
+      run: |
+        pipenv install --dev
+    - name: Run lint
+      run: |
+        make lint
+    - name: Run tests
+      run: |
+        make test
+    - name: Run coverage
+      run: |
+        make cov
