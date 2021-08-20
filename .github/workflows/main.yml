@@ -37,4 +37,5 @@ jobs:
 
     - name: Run coverage
       run: |
-        pipenv run coverage run --source='.' test_dolar.py && coverage report -m
+        pipenv run coverage run --source='.' test_dolar.py
+        pipenv run coverage report -m
