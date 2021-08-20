@@ -33,9 +33,6 @@ class Dolar:
             raise BancoCentralException('Tipo de consulta inválida')
 
         req = self.getURL()
-        if req.status_code != 200:
-            raise BancoCentralException('Erro na conexão')
-
         resp = req.content.decode("utf-8")
         self.json_string = json.loads(resp)
 
@@ -51,8 +48,6 @@ class Dolar:
             f = _periodo["final"].strftime('%m-%d-%Y')
             self.URL_RESOURCE = 'CotacaoDolarPeriodo(dataInicial=@dataInicial,dataFinalCotacao=@dataFinalCotacao)?'
             self.URL_PARAM = f'@dataInicial=%27{i}%27&@dataFinalCotacao=%27{f}%27&$top=100&$format=json'
-        else:
-            raise BancoCentralException('Tipo de consulta inválida')
 
         self.URL = f'{self.URL_BASE}{self.URL_RESOURCE}{self.URL_PARAM}'
 
@@ -69,24 +64,63 @@ class Dolar:
             "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7,mt;q=0.6,gl;q=0.5,he;q=0.4,ru;q=0.3,pl;q=0.2,la;q=0.1,es;q=0.1,fr;q=0.1,de;q=0.1,cy;q=0.1,und;q=0.1",
         }
 
-        return requests.get(self.URL, headers=headers, timeout=None)
+        try:
+            req = requests.get(self.URL, headers=headers, timeout=None)
+        except requests.exceptions.ConnectionError:
+            raise BancoCentralException('Erro na conexão')
+        return req
 
-    def is_holiday(self, day):
+    @staticmethod
+    def is_holiday(day) -> bool:
+        """
+        Retorna True se o dia for feriado
+
+        :param day: date
+        :return: bool
+        """
         cal = BrazilSaoPauloCity()
         if cal.is_working_day(day):
             return False
         return True
 
-    def is_weekday(self, day):
+    @staticmethod
+    def is_weekday(day) -> bool:
+        """
+        Retorna True se o dia for um dia de semana
+
+        :param day: date
+        :return: bool
+        """
         if date.weekday(day) in [5, 6]:  # 5=saturday or 6=sunday
             return True
         return False
 
-    def dolar_compra_ptax(self):
+    def dolar_compra_ptax(self) -> float:
+        """
+        Retorna o valor do dólar ptax no momento da compra em real
+
+        :return: float
+        """
+        if self.json_string["value"] == []:
+            return 0
         return self.json_string["value"][0]["cotacaoCompra"]
 
-    def dolar_venda_ptax(self):
+    def dolar_venda_ptax(self) -> float:
+        """
+        Retorna o valor do dólar ptax no momento da venda em real
+
+        :return: float
+        """
+        if self.json_string["value"] == []:
+            return 0
         return self.json_string["value"][0]["cotacaoVenda"]
 
-    def dolar_ultimacotacao(self):
+    def dolar_ultimacotacao(self) -> float:
+        """
+        Retorna a última cotação do dólar
+
+        :return: float
+        """
+        if self.json_string["value"] == []:
+            return 0
         return self.json_string["value"][0]["dataHoraCotacao"]

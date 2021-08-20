@@ -22,6 +22,13 @@ class TestCase(unittest.TestCase):
         self.cotacaoDia = Dolar(mode=ModosDeConsulta.PorDia, data=TODAY)
         self.cotacaoPeriodo = Dolar(mode=ModosDeConsulta.PorPeriodo, periodo=periodo)
 
+    def test_server_response_diferente_200_ok(self):
+        dolar = Dolar(mode=ModosDeConsulta.PorDia, data=date(2020, 8, 20))
+        dolar.URL = 'http://my.url'
+        with self.assertRaises(BancoCentralException) as context:
+            dolar.getURL()
+        self.assertTrue('Erro na conexão' in str(context.exception))
+
     def test_dolar_compra_ptax(self):
         self.assertIsNotNone(self.cotacaoDia.dolar_compra_ptax())
         self.assertIsNotNone(self.cotacaoPeriodo.dolar_compra_ptax())
@@ -57,9 +64,19 @@ class TestCase(unittest.TestCase):
         self.assertTrue(self.cotacaoDia.dolar_compra_ptax() > 0)
         self.assertTrue(self.cotacaoPeriodo.dolar_compra_ptax() > 0)
 
+    def test_dolar_compra_futuro_zero(self):
+        TODAY = date(2050, 11, 1)
+        self.cotacaoDia = Dolar(mode=ModosDeConsulta.PorDia, data=TODAY)
+        self.assertTrue(self.cotacaoDia.dolar_compra_ptax() == 0)
+
     def test_dolar_venda_ptax(self):
         self.assertIsNotNone(self.cotacaoDia.dolar_venda_ptax())
         self.assertIsNotNone(self.cotacaoPeriodo.dolar_venda_ptax())
+
+    def test_dolar_venda_futuro_zero(self):
+        TODAY = date(2050, 11, 1)
+        self.cotacaoDia = Dolar(mode=ModosDeConsulta.PorDia, data=TODAY)
+        self.assertTrue(self.cotacaoDia.dolar_venda_ptax() == 0)
 
     def test_dolar_venda_ptax_maior_zero(self):
         self.assertTrue(self.cotacaoDia.dolar_venda_ptax() > 0)
@@ -68,6 +85,11 @@ class TestCase(unittest.TestCase):
     def test_ultimacotacao_exist(self):
         self.assertIsNotNone(self.cotacaoDia.dolar_ultimacotacao())
         self.assertIsNotNone(self.cotacaoPeriodo.dolar_ultimacotacao())
+
+    def test_dolar_ultima_cotacao_data_futura_zero(self):
+        TODAY = date(2050, 11, 1)
+        self.cotacaoDia = Dolar(mode=ModosDeConsulta.PorDia, data=TODAY)
+        self.assertTrue(self.cotacaoDia.dolar_ultimacotacao() == 0)
 
     def test_is_holiday_tiradentes(self):
         TODAY = date(2020, 4, 21)
