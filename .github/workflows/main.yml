@@ -3,6 +3,7 @@ on: [push, pull_request]
 jobs:
   run:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
     - uses: actions/checkout@v2
 
@@ -28,12 +29,12 @@ jobs:
 
     - name: Run lint
       run: |
-        make lint
+        pipenv run flake8
 
     - name: Run tests
       run: |
-        make test
+        pipenv run python test_dolar.py
 
     - name: Run coverage
       run: |
-        make cov
+        coverage run --source='.' test_dolar.py && coverage report -m
