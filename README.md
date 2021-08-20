@@ -1,7 +1,7 @@
 # Cotações diárias do Dólar
 
-[![Build Status](https://travis-ci.org/open-bacen/cotacao-diaria-dolar.svg)](https://travis-ci.org/open-bacen/cotacao-diaria-dolar)
-[![codecov](https://codecov.io/gh/open-bacen/cotacao-diaria-dolar/branch/master/graph/badge.svg)](https://codecov.io/gh/open-bacen/cotacao-diaria-dolar) 
+[![cotacao-diaria-dolar](https://github.com/open-bacen/cotacao-diaria-dolar/actions/workflows/main.yml/badge.svg)](https://github.com/open-bacen/cotacao-diaria-dolar/actions/workflows/main.yml)
+[![codecov](https://codecov.io/gh/open-bacen/cotacao-diaria-dolar/branch/main/graph/badge.svg)](https://codecov.io/gh/open-bacen/cotacao-diaria-dolar) 
 
 
 Dólar Ptax é a média aritmética das taxas obtidas em quatro consultas diárias de câmbio.
