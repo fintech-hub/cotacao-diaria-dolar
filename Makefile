@@ -4,7 +4,10 @@ isort:
 	sh -c "isort --skip-glob=.flake8 --recursive . "
 
 lint:
-	flake8
+	flake8 .
+
+cov:
+	coverage run --source='.' test_dolar.py && coverage report -m
 
 test:
 	python ./test_dolar.py
