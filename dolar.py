@@ -22,7 +22,7 @@ class BancoCentralException(BaseException):
 class Dolar:
     def __init__(self, mode: ModosDeConsulta, data: date = None, periodo: dict = None):
         if (mode == ModosDeConsulta.PorDia):
-            if self.is_weekday(data):
+            if self.is_weekend(data):
                 raise BancoCentralException('Sábado e Domingo não há cotações')
             if self.is_holiday(data):
                 raise BancoCentralException('Feriados não há cotações')
@@ -84,9 +84,9 @@ class Dolar:
         return True
 
     @staticmethod
-    def is_weekday(day) -> bool:
+    def is_weekend(day) -> bool:
         """
-        Retorna True se o dia for um dia de semana
+        Retorna True se o dia for um dia de final de semana
 
         :param day: date
         :return: bool
