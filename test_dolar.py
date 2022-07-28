@@ -121,11 +121,11 @@ class TestCase(unittest.TestCase):
 
     def test_is_not_weekday(self):
         TODAY = date(2020, 10, 1)
-        self.assertFalse(self.cotacaoDia.is_weekday(TODAY))
+        self.assertFalse(self.cotacaoDia.is_weekend(TODAY))
 
     def test_is_weekday(self):
         TODAY = date(2020, 10, 3)
-        self.assertTrue(self.cotacaoDia.is_weekday(TODAY))
+        self.assertTrue(self.cotacaoDia.is_weekend(TODAY))
 
 
 if __name__ == '__main__':
